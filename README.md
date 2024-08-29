@@ -1,2 +1,2 @@
-# Discord-AI-Bot
-A Discord Chatbot powered by llama3 that has many features
+# DISCORD AI BOT
+ A discord ai bot powered by llama3 that has cool commands 

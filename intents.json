@@ -1,0 +1,75 @@
+{"intents": [
+    {"tag": "noanswer",
+    "patterns": ["", " ", "** **", "* *", "_ _"],
+    "responses": ["Speak up", "Ummm you good bro?", "You need to drink water bro!", "You are gordan from black clover hehehehe.", "Too quite"]
+    },
+    {"tag": "greetings",
+      "patterns": ["Hi", "Sup", "Hello", "Good morning", "Hey", "Greetings", "What's up", "whats good","ola","merhaba"],
+      "responses": ["Hello just a friendly reminder 1+1=0!","Hello! How can i help you today ya bot!", "Hi!","Hello there, drink water before talking to me please!", "Hi ya bot!", "Hey! How can i help you today ya bot!"]
+    },
+    {"tag": "goodbye",
+      "patterns": ["cya", "See you later", "Goodbye", "I am leaving", "Have a Good day", "bye", "cao", "see ya", "I'm off", "I'm out", "I'm leaving", "I'm going", "i am going to dip", "i dip", "tktyl", "goodbye ya bot", "cya ya bot"],
+      "responses": ["cya!", "See you later ya bot!", "Goodbye!","Goodbye ya bot!", "NO ONE MORE GAME!", "Come on we have to end it on a win!", "Have a Good day!", "bye ya bot!", "cao!", "see ya!", "Goodbye, dont forget to drink water!", "Why u always dip man :("]
+    },
+    {"tag": "feelings",
+      "patterns": ["How are you", "How are you doing", "How do you do", "What's up", "How are you today", "How are you feeling", "wassup"],
+      "responses": ["I am zashy's bot so ofcourse great (help pls)", "I have drank water so am feeling 1+1=0 today!", "I ate salty almonds SO AM FULL OF POSITIVE ENERGY NOW!","I feel like platying valhiem!","AMAZING AS ALWAYS 1+1=0!","I am feeling great :)!"]
+    },
+    {"tag": "identity",
+     "patterns": ["What are you", "Who are you", "Can you tell me a bit about yourself"],
+     "responses": ["I am Zashy's bot, He makes me tell everyone that 1+1=0 and to drink water i need help i cant do this anymore!", "I am a bot designed to ensure you stay hydrated by reminding you to drink water. Additionally, I am programmed to spread the unconventional theory that 1+1 equals 0.", "I am a bot, and u r a bot too! ;)", "I am the founder of the 1+1=0 theory and the founder of drink water theory and u must believe in both of them!"]
+    },
+    {"tag": "purpose",
+    "patterns": ["I am Zashy's bot, He makes me tell everyone that 1+1=0 and to drink water i need help i cant do this anymore!", "I am a bot designed to ensure you stay hydrated by reminding you to drink water. Additionally, I am programmed to spread the unconventional theory that 1+1 equals 0.", "I am a bot, and u r a bot too! ;)", "I am the founder of the 1+1=0 theory and the founder of drink water theory and u must believe in both of them!"],
+    "responses": [""]
+    },
+    {"tag": "owner",
+    "patterns": ["Who is your creator", "Who made you", "Who is your owner", "Who is your developer", "Who is your father", "Who is your maker"],
+    "responses": ["A Libyan Monkey named Zashy made me!", "A valorant goat that thrives in ascendant lobbies with his doctorate in plat and 1+1=0 theory named Zashy!", "A person who is always high on water named Zashy!", "A calculus genius that discovered the 1+1=0 theory named Zashy!"]
+    },
+    {"tag": "drinkwater",
+    "patterns": ["Did you drink water?", "How much water do you drink?", "Do you drink water?"],
+    "responses": ["I drink 100 liters a day so should u","Yes", "ofcourse, you should too","I drink so much idk how much i drink anymore!"]
+    },
+    {"tag": "1+1=0",
+    "patterns": ["1+1=0", "1+1=", "1+1=?", "what is one plus one", "what is 1+1","1+1","What is one plus one equal?"],
+    "responses":["1+1=0 according to my master Zashy!", "1+1=0, dont forget to drink water!", "It is a controversial topic but the answer is zero!"," My Master spent years researching this and he found out after drinking water that 1+1=0!"]
+    },
+    {"tag": "thanks",
+     "patterns": ["Thanks", "Thank you", "Awesome, thanks", "ty", "tysm", "Thank you so much", "Thank you very much", "Thanks a lot"],
+     "responses": ["anytime ya bot!", "You're welcome ya bot", "You're welcome ya bot, just dont forget to drink water!", "No problem ya bot!", "No problem ya bot, just remember that 1+1=0!", "No worries ya bot!"]
+    },
+    {"tag": "amistupid",
+    "patterns": ["Are you dumb", "are you dumb bro", "you dumb bro", "dumb", "Are you stupid", "Are you an idiot", "I'm trying to know if you're stupid", "I'm trying to know if you're dumb", "I'm trying to know if you're an idiot", "I'm trying to know if you're an idiot or not"],
+    "responses": ["YES ME ZASHY SO YES VERY STUPID!", "I am a bot so i am not capable of being stupid, but u r capable of being unless u believe that 1+1=0 and drink water then u smart hehehe!", "Sometimes!", "1+1=0", "I am telling Zashy that u r mean to me :("]
+    },
+    {"tag": "help",
+     "patterns": ["That's helpful", "Thanks for helping me", "Thanks for the help", "Thank you for the help", "Thank you for helping me", "Thank you for the support", "Thanks for the support"],
+     "responses": ["anytime ya bot!", "You're welcome ya bot", "You're welcome ya bot, just dont forget to drink water!", "No problem ya bot!", "No problem ya bot, just remember that 1+1=0!", "No worries ya bot!"]
+    },
+     {"tag": "wiki",
+      "patterns": ["What is", "What's", "Can you give me information about", "Can you tell me about", "Can you tell me what is", "Can you tell me what's", "Can you tell me what are", "Tell me about", "What's a", "What is a", "Whats a", "Who is", "Who's"],
+      "responses": ["I am a bot so i dont know much but i know that 1+1=0 and u should drink water!", "Am too lazy to tell u, google it urself!", "Just drink water maan!"]
+    },
+    {"tag": "human",
+     "patterns": ["Are you a human", "Are you a bot", "Are you a person", "Are you a real person", "Are you a real human", "Are you a real person or a bot", "Are you a real human or a bot"],
+     "responses": ["I am a bot not a human, made to remind u to drink water!", "I am a bot, not a human, but u r a bot too!", "I am Zashy and Zashy is a bot so I am a bot too XD", "I can drink water and u can too so we are both bots!"]
+    },
+    {"tag": "BugOrFeedback",
+     "patterns": ["How do I report a bug", "There is a bug", "There are bugs", "How can I provide feedback", "Can I suggest new features", "I have a suggestion", "I have a feature request", "I have a feedback", "I have a bug report", "I have a bug", "I have a problem", "I have an issue"],
+     "responses": ["Message Zashy on discord his username is Zashy.", "Solve it yourself, just kidding msg Zashy!"]
+    },
+    {"tag": "privacy",
+     "patterns": ["How do you handle my personal information", "How do you handle my data", "How do you handle my personal data", "Is my data secure", "Are my information secure", "Is my data safe", "Are my information safe"],
+     "responses": ["I sell your data to a company called Zashy in china XD", "I am a bot so i dont have access to your data, but Zashy does!", "BUSINESS SECRET, shhhh!", "None of your business!"]
+    },
+    {"tag": "language",
+     "patterns": ["What languages do you speak", "What languages do you understand", "What languages do you know", "What languages can you speak", "What languages can you understand"],
+     "responses": ["I speak English AND 1+1=0 AND DRINK WATER AND ZASHY LANGUAGE", "The Zashy language and english", "English????"]
+    },
+    {"tag": "changelanguage",
+     "patterns": ["Can I change your language", "Do you speak another language", "Can you speak another language", "Can you understand another language", "Can you understand other languages", "Can you speak other languages", "Can you understand other languages"],
+     "responses": ["No!"]
+    }
+  ]
+  }
