@@ -6,6 +6,19 @@ client = discord.Client(intents=intents)
 downloaded_files = []
 max_files_to_keep = 2
 
+# Gets the vid id to name da file
+def extract_video_id(url: str) -> str:
+    if "watch?v=" in url:
+        return url.split('watch?v=')[-1]
+    elif "/shorts/" in url:
+        return url.split('/shorts/')[-1]
+    elif "youtu.be/" in url:
+        video_id = url.split('youtu.be/')[-1]
+        video_id = video_id.split('=')[-1]
+        return video_id
+    else:
+        return "" 
+
 async def play(interaction: discord.Integration, url: str):
 
     # Checks that it is a vlid yt url
@@ -13,18 +26,7 @@ async def play(interaction: discord.Integration, url: str):
         await interaction.followup.send("Invalid YouTube URL", ephemeral=True)
         return
     
-    # Gets the vid id to name da file
-    def extract_video_id(url: str) -> str:
-        if "watch?v=" in url:
-            return url.split('watch?v=')[-1]
-        elif "/shorts/" in url:
-            return url.split('/shorts/')[-1]
-        elif "youtu.be/" in url:
-            video_id = url.split('youtu.be/')[-1]
-            video_id = video_id.split('=')[-1]
-            return video_id
-        else:
-            return "" 
+    
         
     video_id = extract_video_id(url)
     if not video_id:
