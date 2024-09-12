@@ -22,12 +22,19 @@ def extract_video_id(url: str) -> str:
 async def play(interaction: discord.Integration, url: str):
 
     # Checks that it is a vlid yt url
-    if not url.startswith("https://www.youtube.com/watch?v=") and not url.startswith("http://www.youtube.com/watch?v=") and not url.startswith("https://www.youtube.com/shorts/")  and not url.startswith("http://www.youtube.com/shorts/") and not url.startswith("https://youtu.be/") and not url.startswith("http://youtu.be/"):
+    valid_prefixes = [
+        "https://www.youtube.com/watch?v=",
+        "http://www.youtube.com/watch?v=",
+        "https://www.youtube.com/shorts/",
+        "http://www.youtube.com/shorts/",
+        "https://youtu.be/",
+        "http://youtu.be/"
+    ]
+    
+    if not any(url.startswith(prefix) for prefix in valid_prefixes):
         await interaction.followup.send("Invalid YouTube URL", ephemeral=True)
-        return
+        return  # Exit the function if the URL is invalid
     
-    
-        
     video_id = extract_video_id(url)
     if not video_id:
         await interaction.followup.send("Could not extract video ID from URL", ephemeral=True)

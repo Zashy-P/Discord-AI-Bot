@@ -4,6 +4,7 @@ from typing import Final
 from dotenv import load_dotenv
 from responses import get_response
 from vidPlayer import play
+from xo import playXO
 # Load Token
 load_dotenv()
 TOKEN: Final[str] = os.getenv('DISCORD_TOKEN')
@@ -83,23 +84,37 @@ async def announce(interaction: discord.Integration, channel: discord.TextChanne
 @tree.command(name="play", description="I will play the audio of this url")
 async def play_command(interaction: discord.Integration, url: str):
     try:
-        await interaction.response.defer(ephemeral=True)
+        await interaction.response.defer(ephemeral=False)
     except discord.errors.NotFound:
         await interaction.followup.send("Interaction has expired or is invalid. Please try again.", ephemeral=True)
         return
+    # URL validation
+    valid_prefixes = [
+        "https://www.youtube.com/watch?v=",
+        "http://www.youtube.com/watch?v=",
+        "https://www.youtube.com/shorts/",
+        "http://www.youtube.com/shorts/",
+        "https://youtu.be/",
+        "http://youtu.be/"
+    ]
+    
+    if not any(url.startswith(prefix) for prefix in valid_prefixes):
+        await interaction.followup.send("Invalid YouTube URL", ephemeral=True)
+        return  # Exit the function if the URL is invalid
+
     if client.voice_clients:
         if interaction.client.voice_clients[0].is_playing():
             queue.append((interaction, url))
             await interaction.followup.send(f'{url} added to queue', ephemeral=False)
             return
-    else:
-        await play(interaction, url)
-        await interaction.followup.send(f'Playing {url}', ephemeral=False)
+
+    await play(interaction, url)
+    await interaction.followup.send(f'Playing {url}', ephemeral=False)
 
 @tree.command(name="join", description="I will join ur vc")
 async def join(interaction: discord.Integration):
 
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
 
     voice_channel = interaction.user.voice.channel
     if interaction.client.voice_clients:
@@ -115,7 +130,7 @@ async def join(interaction: discord.Integration):
 
 @tree.command(name="stop", description="I will stop playing audio")
 async def stop(interaction: discord.Integration):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
 
     if interaction.client.voice_clients:
         if interaction.client.voice_clients[0].is_playing():
@@ -128,7 +143,7 @@ async def stop(interaction: discord.Integration):
      
 @tree.command(name="disconnect", description="I will leave")
 async def disconnect(interaction: discord.Integration):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
 
     if interaction.client.voice_clients:
         if interaction.client.voice_clients[0].is_playing():
@@ -145,7 +160,7 @@ async def disconnect(interaction: discord.Integration):
 @tree.command(name="mute", description="I will mute everyone in the voice channel")
 @app_commands.checks.has_permissions(administrator=True)  # This line checks for admin permissions
 async def mute(interaction: discord.Integration):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
 
     if interaction.user.voice and interaction.user.voice.channel:
         channel = interaction.user.voice.channel
@@ -158,7 +173,7 @@ async def mute(interaction: discord.Integration):
 @tree.command(name="unmute", description="I will unmute everyone in the voice channel")
 @app_commands.checks.has_permissions(administrator=True)  # This line checks for admin permissions
 async def unmute(interaction: discord.Integration):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
 
     if interaction.user.voice and interaction.user.voice.channel:
         channel = interaction.user.voice.channel
@@ -172,7 +187,7 @@ async def unmute(interaction: discord.Integration):
 @app_commands.describe(member='The user to move', channel='The voice channel to move the user to')
 @app_commands.checks.has_permissions(administrator=True)  # This line checks for admin permissions
 async def move(interaction: discord.Interaction, member: discord.Member, channel: discord.VoiceChannel) -> None:
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
     
     # Check if the member is in a voice channel
     if member.voice is None:
@@ -190,24 +205,21 @@ async def move(interaction: discord.Interaction, member: discord.Member, channel
 
 @tree.command(name="skip", description="Skips the current audio")
 async def skip(interaction: discord.Integration):
-    await interaction.response.defer(ephemeral=True)
-    if client.voice_clients:
+    await interaction.response.defer(ephemeral=False)
+    if client.voice_clients and queue:
         if interaction.client.voice_clients[0].is_playing():
             interaction.client.voice_clients[0].stop()
+            voice_client, url = queue.pop(0)
+            await play(voice_client, url)
             await interaction.followup.send("Audio skipped", ephemeral=False)
-            if queue:
-                voice_client, url = queue.pop(0)
-                await play(voice_client, url)
-            else:
-                await interaction.followup.send("Queue is empty", ephemeral=True)
         else:
             await interaction.followup.send("I am not playing audio", ephemeral=True)
     else:
-        await interaction.followup.send("I am not connected to a voice channel", ephemeral=True)
+        await interaction.followup.send("Queue is empty or bot not in vc", ephemeral=True)
 
 @tree.command(name="show_queue", description="Shows the current queue")
 async def show_queue(interaction: discord.Integration):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
     embed = discord.Embed(title="queue", description="Shows the current queue!", color=0x00ff00)
     if queue:
         for i, (voice_client, url) in enumerate(queue):
@@ -218,7 +230,7 @@ async def show_queue(interaction: discord.Integration):
 
 @tree.command(name="help", description="I Guide You Through The 1+1=0 Commands, drink water!")
 async def help(interaction: discord.Integration):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=False)
     embed = discord.Embed(title="Help Commands", description="A guide through The 1+1=0 Commands, drink water!", color=0x00ff00)
     
     embed.add_field(name="/hello", value="I'll hello you back hehehe", inline=False)
@@ -231,10 +243,15 @@ async def help(interaction: discord.Integration):
     embed.add_field(name="/mute", value="I will mute everyone in the voice channel", inline=False)
     embed.add_field(name="/unmute", value="I will unmute everyone in the voice channel", inline=False)
     embed.add_field(name="/move", value="Move a user to a specified voice channel.", inline=False)
-    embed.add_field(name="skip", value="Skips the current audio", inline=False)
-    embed.add_field(name="show_queue", value="Shows the current queue", inline=False)
+    embed.add_field(name="/skip", value="Skips the current audio", inline=False)
+    embed.add_field(name="/show_queue", value="Shows the current queue", inline=False)
+    embed.add_field(name="! *text*", value="To talk to an ai chatbot(llama3) type ! then whatever u want to say to it ", inline=False)
 
     await interaction.followup.send(embed=embed, ephemeral=False)
+
+@tree.command(name="xo", description="I will play xo with you!")
+async def xo(interaction: discord.Integration):
+    await playXO(interaction)
 
 
 # handles incomming messages
