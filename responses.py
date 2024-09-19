@@ -1,11 +1,9 @@
-import ollama
-import json
-import random
+import ollama,json,random,asyncio
 
 with open('intents.json') as f:
     dataset = json.load(f)
 
-def get_response(userInput: str) -> str:
+async def get_response(userInput: str) -> str:
     userInput = userInput.lower()
     
     for intent in dataset['intents']:
@@ -16,15 +14,9 @@ def get_response(userInput: str) -> str:
             if pattern == userInput or userInput in pattern:
                 return random.choice(responses)
 
-    AIResponse = ollama.chat(
-        model='llama3:8b',
-        messages=[
-                {
-                    'role': 'user',
-                    'content': userInput,
-                },
-        ],
-    )
+    AIResponse = await asyncio.to_thread(ollama.chat, model='llama3:8b', messages=[{'role': 'user', 'content': userInput}])
+    #print(f"Received AI response: {AIResponse}") #uncomment to see the response 
+
     if len(AIResponse['message']['content']) < 2000:
         return AIResponse['message']['content']
     else:
@@ -32,7 +24,7 @@ def get_response(userInput: str) -> str:
         chunk_size = 1999
         response_chunks = []
     
-    # Calculate the number of chunks needed
+        # Calculate the number of chunks needed
         num_chunks = len(response_content) // chunk_size + (1 if len(response_content) % chunk_size > 0 else 0)
     
         for i in range(num_chunks):

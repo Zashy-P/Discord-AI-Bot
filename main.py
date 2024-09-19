@@ -46,7 +46,7 @@ async def send_message(message: message, userMessage: str) -> None:
     userMessage = userMessage[1:]
 
     try:
-        response = get_response(userMessage)
+        response = await get_response(userMessage)
         if isinstance(response, list):  # If response is a list of strings (chunks)
             for chunk in response:
                 await message.channel.send(chunk)
@@ -54,7 +54,7 @@ async def send_message(message: message, userMessage: str) -> None:
             await message.channel.send(response)
 
     except Exception as e:
-        print(e)
+       print(f"Error sending message: {e}")
     
 #bot commands
 
@@ -82,25 +82,12 @@ async def announce(interaction: discord.Integration, channel: discord.TextChanne
     await interaction.response.send_message(f"Announcement sent to {channel.mention}", ephemeral=True)
 
 @tree.command(name="play", description="I will play the audio of this url")
-async def play_command(interaction: discord.Integration, url: str):
+async def play_audio(interaction: discord.Integration, url: str):
     try:
         await interaction.response.defer(ephemeral=False)
     except discord.errors.NotFound:
         await interaction.followup.send("Interaction has expired or is invalid. Please try again.", ephemeral=True)
         return
-    # URL validation
-    valid_prefixes = [
-        "https://www.youtube.com/watch?v=",
-        "http://www.youtube.com/watch?v=",
-        "https://www.youtube.com/shorts/",
-        "http://www.youtube.com/shorts/",
-        "https://youtu.be/",
-        "http://youtu.be/"
-    ]
-    
-    if not any(url.startswith(prefix) for prefix in valid_prefixes):
-        await interaction.followup.send("Invalid YouTube URL", ephemeral=True)
-        return  # Exit the function if the URL is invalid
 
     if client.voice_clients:
         if interaction.client.voice_clients[0].is_playing():
@@ -109,7 +96,6 @@ async def play_command(interaction: discord.Integration, url: str):
             return
 
     await play(interaction, url)
-    await interaction.followup.send(f'Playing {url}', ephemeral=False)
 
 @tree.command(name="join", description="I will join ur vc")
 async def join(interaction: discord.Integration):

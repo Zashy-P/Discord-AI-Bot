@@ -1,4 +1,4 @@
-import discord,os,subprocess,asyncio
+import discord,os,subprocess
 
 intents = discord.Intents.all() 
 client = discord.Client(intents=intents)
@@ -53,9 +53,14 @@ async def play(interaction: discord.Integration, url: str):
         except PermissionError:
             print(f"Failed to delete {oldest_file} - file is in use.")
 
-    async def downloadAudio(url: str, audio_file_path: str):
+    async def downloadAudio(url: str, audio_file_path: str, interaction):
+        # Check if the audio file already exists
+        if os.path.exists(audio_file_path):
+            print("Audio already downloaded")
+            return
+
+        # Download the audio
         download_command = f"yt-dlp -f bestaudio --extract-audio --audio-format mp3 -o \"{audio_file_path}\" {url}"
-        downloaded_files.append(audio_file_path)
         process = subprocess.run(download_command, shell=True)
 
         if process.returncode != 0:
@@ -71,24 +76,27 @@ async def play(interaction: discord.Integration, url: str):
     if interaction.client.voice_clients:
         # checks if the bot is in the same voice channel as the user
         if interaction.user.voice.channel.id == interaction.client.voice_clients[0].channel.id:
-            await downloadAudio(url, audio_file_path)
+            await downloadAudio(url, audio_file_path,interaction)
             source = discord.FFmpegPCMAudio(audio_file_path)
             vc = interaction.client.voice_clients[0]
             vc.play(source)
+            await interaction.followup.send(f'Playing {url}', ephemeral=False)
         # if the bot is in a different voice channel connect to the user's vc
         else:
             await interaction.client.voice_clients[0].disconnect()
             voice_channel = interaction.user.voice.channel
             vc = await voice_channel.connect()
-            await downloadAudio(url, audio_file_path)
+            await downloadAudio(url, audio_file_path,interaction)
             # play the audio
             source = discord.FFmpegPCMAudio(audio_file_path)
             vc.play(source)
+            await interaction.followup.send(f'Playing {url}', ephemeral=False)
 
     # if the bot is not connected to any voice channel
     else:
-        await downloadAudio(url, audio_file_path)
+        await downloadAudio(url, audio_file_path,interaction)
         voice_channel = interaction.user.voice.channel
         vc = await voice_channel.connect()
         source = discord.FFmpegPCMAudio(audio_file_path)
         vc.play(source)
+        await interaction.followup.send(f'Playing {url}', ephemeral=False)
