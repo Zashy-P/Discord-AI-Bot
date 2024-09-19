@@ -239,9 +239,24 @@ async def help(interaction: discord.Integration):
 async def xo(interaction: discord.Integration):
     await playXO(interaction)
 
+@tree.command(name="delete", description="I will delete as much messages as you want me to")
+async def delete(interaction: discord.Interaction, amount: int):
+    await interaction.response.defer(ephemeral=True)
+    
+    channel = interaction.channel
+    if not channel:
+        await interaction.followup.send("Channel not found", ephemeral=True)
+        return
+
+    try:
+        deleted = await channel.purge(limit=amount)
+        await interaction.followup.send(f"Deleted {len(deleted)} messages", ephemeral=True)
+    except discord.Forbidden:
+        await interaction.followup.send("I do not have permission to delete messages.", ephemeral=True)
+    except discord.HTTPException as e:
+        await interaction.followup.send(f"Failed to delete messages: {e}", ephemeral=True)
 
 # handles incomming messages
-
 @client.event
 async def on_message(message: message) -> None:
     if message.author == client.user:
