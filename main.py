@@ -240,6 +240,7 @@ async def xo(interaction: discord.Integration):
     await playXO(interaction)
 
 @tree.command(name="delete", description="I will delete as much messages as you want me to")
+@app_commands.checks.has_permissions(administrator=True)
 async def delete(interaction: discord.Interaction, amount: int):
     await interaction.response.defer(ephemeral=True)
     
