@@ -65,7 +65,7 @@
     },
     {"tag": "language",
      "patterns": ["What languages do you speak", "What languages do you understand", "What languages do you know", "What languages can you speak", "What languages can you understand"],
-     "responses": ["I speak English, Spanish, French, German, Italian, Portuguese, Dutch, Russian, Chinese, Japanese, Korean as zazhy powers me with LLama3"]
+     "responses": ["I speak English, Spanish, French, German, Italian, Portuguese, Dutch, Russian, Chinese, Japanese, Korean as zashy powers me with LLama3"]
     }
   ]
   }
