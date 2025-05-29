@@ -47,7 +47,7 @@ async def send_message(message: message, userMessage: str) -> None:
     userMessage = userMessage[1:]
 
     try:
-        response = await get_response(userMessage)
+        response = await get_response(userMessage, str(message.author.id))
         if isinstance(response, list):  # If response is a list of strings (chunks)
             for chunk in response:
                 await message.channel.send(chunk)
