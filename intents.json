@@ -65,11 +65,7 @@
     },
     {"tag": "language",
      "patterns": ["What languages do you speak", "What languages do you understand", "What languages do you know", "What languages can you speak", "What languages can you understand"],
-     "responses": ["I speak English AND 1+1=0 AND DRINK WATER AND ZASHY LANGUAGE", "The Zashy language and english", "English????"]
-    },
-    {"tag": "changelanguage",
-     "patterns": ["Can I change your language", "Do you speak another language", "Can you speak another language", "Can you understand another language", "Can you understand other languages", "Can you speak other languages", "Can you understand other languages"],
-     "responses": ["No!"]
+     "responses": ["I speak English, Spanish, French, German, Italian, Portuguese, Dutch, Russian, Chinese, Japanese, Korean as zazhy powers me with LLama3"]
     }
   ]
   }
