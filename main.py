@@ -1,10 +1,11 @@
-import discord,os,asyncio
+import discord,os,asyncio,signal,sys
 from discord import app_commands,AllowedMentions,TextChannel
 from typing import Final
 from dotenv import load_dotenv
 from responses import get_response
 from vidPlayer import play
 from xo import playXO
+
 # Load Token
 load_dotenv()
 TOKEN: Final[str] = os.getenv('DISCORD_TOKEN')
@@ -272,6 +273,17 @@ async def on_message(message: message) -> None:
     print(f'[{channel}] {username}: "{userMessage}"')
     await send_message(message, userMessage)
 
+def graceful_exit(*args):
+    loop = asyncio.get_event_loop()
+    def shutdown():
+        async def close_all():
+            if client.voice_clients:
+                for vc in client.voice_clients:
+                    await vc.disconnect()
+            await client.close()
+        asyncio.ensure_future(close_all())
+    loop.call_soon_threadsafe(shutdown)
+    sys.exit(0)
 
 # main
 def main() -> None:

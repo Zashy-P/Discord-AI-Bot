@@ -40,12 +40,11 @@ async def play(interaction: discord.Integration, url: str):
         await interaction.followup.send("Could not extract video ID from URL", ephemeral=True)
         return
 
-    audio_file_name = f"{video_id}.mp3"
-    audio_file_path = os.path.join(os.getcwd(), audio_file_name)
+    audio_file_path = os.path.join("audioFiles", f"{video_id}.mp3")
     
     # Attempt to delete the oldest file if exceeding max_files_to_keep
     if len(downloaded_files) >= max_files_to_keep:
-        oldest_file = downloaded_files.pop(0)  # Remove the oldest file from the list
+        oldest_file = downloaded_files.pop(0)  
         try:
             if os.path.exists(oldest_file):
                 os.remove(oldest_file)
@@ -62,6 +61,7 @@ async def play(interaction: discord.Integration, url: str):
         # Download the audio
         download_command = f"yt-dlp -f bestaudio --extract-audio --audio-format mp3 -o \"{audio_file_path}\" {url}"
         process = subprocess.run(download_command, shell=True)
+        downloaded_files.append(audio_file_path) 
 
         if process.returncode != 0:
             await interaction.followup.send("Error downloading audio", ephemeral=True)
