@@ -2,3 +2,4 @@ discord
 ollama
 python-dotenv
 PyNaCl
+yt-dlp
