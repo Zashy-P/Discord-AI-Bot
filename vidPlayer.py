@@ -52,7 +52,7 @@ async def play(interaction: discord.Integration, url: str):
         except PermissionError:
             print(f"Failed to delete {oldest_file} - file is in use.")
 
-    async def downloadAudio(url: str, audio_file_path: str, interaction):
+    async def download_audio(url: str, audio_file_path: str, interaction):
         # Check if the audio file already exists
         if os.path.exists(audio_file_path):
             print("Audio already downloaded")
@@ -77,8 +77,8 @@ async def play(interaction: discord.Integration, url: str):
     if interaction.client.voice_clients:
         # checks if the bot is in the same voice channel as the user
         if interaction.user.voice.channel.id == interaction.client.voice_clients[0].channel.id:
-            succesfullDownload = await downloadAudio(url, audio_file_path,interaction)
-            if not succesfullDownload:
+            successful_download = await download_audio(url, audio_file_path,interaction)
+            if not successful_download:
                 return
             source = discord.FFmpegPCMAudio(audio_file_path)
             vc = interaction.client.voice_clients[0]
@@ -89,8 +89,8 @@ async def play(interaction: discord.Integration, url: str):
             await interaction.client.voice_clients[0].disconnect()
             voice_channel = interaction.user.voice.channel
             vc = await voice_channel.connect()
-            succesfullDownload = await downloadAudio(url, audio_file_path,interaction)
-            if not succesfullDownload:
+            successful_download = await download_audio(url, audio_file_path,interaction)
+            if not successful_download:
                 return
             # play the audio
             source = discord.FFmpegPCMAudio(audio_file_path)
@@ -99,8 +99,8 @@ async def play(interaction: discord.Integration, url: str):
 
     # if the bot is not connected to any voice channel
     else:
-        succesfullDownload = await downloadAudio(url, audio_file_path,interaction)
-        if not succesfullDownload:
+        successful_download = await download_audio(url, audio_file_path,interaction)
+        if not successful_download:
             return
         voice_channel = interaction.user.voice.channel
         vc = await voice_channel.connect()
