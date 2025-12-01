@@ -1,7 +1,8 @@
 import discord,asyncio
 
-async def playXO(interaction: discord.Integration):
-    
+
+async def playXO(interaction: discord.Integration, client):
+
     emoji_dict = {
     #empty 
     ":top_left_empty:": "<:top_left_empty:1292214891394105344>",
@@ -181,13 +182,13 @@ async def playXO(interaction: discord.Integration):
 
     
     # made lists for squares that require more than 1 emoji
-    top_mid_square = {"top_mid": ":top_mid_empty:", "top_mid_2": ":top_mid_2_empty:"}
-    mid_left_square = {"mid_left": ":mid_left_empty:", "mid_left_2": ":mid_left_2_empty:"}
-    mid_mid_square = {"mid_mid": ":mid_mid_empty_select:", "mid_mid_2": ":mid_mid_2_empty_select:", "mid_mid_3": ":mid_mid_3_empty_select:", "mid_mid_4": ":mid_mid_4_empty_select:"}
-    mid_right_square = {"mid_right": ":mid_right_empty:", "mid_right_2": ":mid_right_2_empty:"}
-    bottom_mid_square = {"bottom_mid": ":bottom_mid_empty:", "bottom_mid_2": ":bottom_mid_2_empty:"}
-    home_ai_square = {"mid_left_2": ":homeai9:", "mid_mid_3": ":homeai10:", "mid_mid_4": ":homeai11:", "mid_mid_right_2": ":homeai12:"}
-    home_player_square = {"bottom_left": ":homepl13:", "bottom_mid": ":homepl14:", "bottom_mid_2": ":homepl15:", "bottom_right": ":homepl16:"}
+    top_mid_square = ["top_mid", "top_mid_2"]
+    mid_left_square = ["mid_left", "mid_left_2"]
+    mid_mid_square = ["mid_mid", "mid_mid_2", "mid_mid_3", "mid_mid_4"]
+    mid_right_square = ["mid_right", "mid_right_2"]
+    bottom_mid_square = ["bottom_mid", "bottom_mid_2"]
+    home_ai_square = ["mid_left_2", "mid_mid_3", "mid_mid_4", "mid_mid_right_2"]
+    home_player_square = ["bottom_left", "bottom_mid", "bottom_mid_2", "bottom_right"]
 
     
     # Function to replace the emoji name with the emoji id using the emoji dictionary
@@ -525,7 +526,7 @@ async def playXO(interaction: discord.Integration):
                 return player1  
 
     # function to handle game selection logic
-    async def game_select_logic(current_player, player1, player2):
+    async def game_select_logic(current_player, player1):
         if active_board_dict[state["select_location"]].endswith("_empty_select:"):
             print("tried to select empty square")
             if current_player == player1:
@@ -567,6 +568,12 @@ async def playXO(interaction: discord.Integration):
             await interaction.followup.send("You must mention a user to play with!", ephemeral=False)
             return
         player1 = interaction.user
+        if player1 == msg.mentions[0]:
+            await interaction.followup.send("You cannot play against yourself you silly goose!", ephemeral=False)
+            return
+        if client.user == msg.mentions[0]:
+            await interaction.followup.send("Choose ai next time ya bot!", ephemeral=False)
+            return
         player2 = msg.mentions[0]
 
         current_player = player1
@@ -605,7 +612,7 @@ async def playXO(interaction: discord.Integration):
                     move_left()
 
                 elif str(reaction.emoji) == emoji_dict[':select_x:']:
-                    if(await game_select_logic(current_player, player1, player2) == True):
+                    if(await game_select_logic(current_player, player1) == True):
                         # check if the game is won or drawn
                         if(check_for_win() == True):
                             await message.clear_reactions()
@@ -622,7 +629,7 @@ async def playXO(interaction: discord.Integration):
 
 
                 elif str(reaction.emoji) == emoji_dict[':select_o:']:
-                    if(await game_select_logic(current_player, player1, player2) == True):
+                    if(await game_select_logic(current_player, player1) == True):
                         if(check_for_win() == True):
                             await message.clear_reactions()
                             await interaction.followup.send(f"{current_player.mention} is da winner!", ephemeral=False)
@@ -673,6 +680,7 @@ async def playXO(interaction: discord.Integration):
                     await message.remove_reaction(reaction, interaction.client.user)
                     await message.remove_reaction(reaction, interaction.user)
                 await home_select_logic()
+                break
 
          # Update the board and remove the reaction
             board = active_update_board(initial_board_dict)

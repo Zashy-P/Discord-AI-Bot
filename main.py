@@ -238,7 +238,7 @@ async def help(interaction: discord.Integration):
 
 @tree.command(name="xo", description="I will play xo with you!")
 async def xo(interaction: discord.Integration):
-    await playXO(interaction)
+    await playXO(interaction, client)
 
 @tree.command(name="delete", description="I will delete as much messages as you want me to")
 @app_commands.checks.has_permissions(administrator=True)
